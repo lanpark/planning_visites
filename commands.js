@@ -1,48 +1,50 @@
 Office.onReady(() => {
-  // Rien à initialiser : ce fichier ne contient que l'action du bouton.
+  // Initialisation standard
 });
 
-
-// Fonction globale de secours pour attraper les erreurs de syntaxe ou d'exécution
-self.onerror = function(message, source, lineno, colno, error) {
-    const txt = "Erreur Globale: " + message + " à " + source + ":" + lineno;
-    alert(txt); // Tente d'afficher une boîte système
-    if(self.localStorage) localStorage.setItem('addin_error', txt);
-    return false;
-};
+let loginDialog; // Variable pour garder une référence à la fenêtre
 
 function actionOpenPlanning(event) {
-  try {
-    // Étape 1 : Vérifier si l'API Office est bien chargée dans ce contexte
-    if (typeof Office === 'undefined') {
-      alert("Erreur : L'objet 'Office' n'est pas défini !");
-      if(event) event.completed();
-      return;
-    }
+  const dialogUrl = "https://lanpark.github.io/planning_visites/dialog.html";
 
-    var dialogUrl = "https://lanpark.github.io/planning_visites/dialog.html";
+  Office.context.ui.displayDialogAsync(
+    dialogUrl,
+    {
+      height: 80,
+      width: 60,
+      displayInIframe: false, // Ouvre une vraie fenêtre de navigation popup
+      promptBeforeOpen: false
+    },
+    (asyncResult) => {
+      if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+        console.error("Impossible d'ouvrir le planning : " + asyncResult.error.message);
+        // En cas d'échec direct d'ouverture, on libère immédiatement le bouton
+        event.completed();
+      } else {
+        // Le dialogue s'est ouvert avec succès !
+        loginDialog = asyncResult.value;
 
-    alert("Tentative d'ouverture du dialogue..."); // Pour valider que le clic est bien reçu
+        // TRÈS IMPORTANT : On écoute les événements de cette fenêtre
+        // Notamment si l'utilisateur clique sur la croix "X" pour la fermer
+        loginDialog.addEventHandler(Office.EventType.DialogEventReceived, (arg) => {
+          if (arg.error === 12006) { 
+            // 12006 = L'utilisateur a fermé la boîte de dialogue
+            console.log("L'utilisateur a fermé la fenêtre.");
+            // C'est SEULEMENT ICI qu'on signale à Outlook que tout est fini
+            event.completed();
+          }
+        });
 
-    Office.context.ui.displayDialogAsync(
-      dialogUrl,
-      { height: 80, width: 60, displayInIframe: false, promptBeforeOpen: false },
-      function (asyncResult) {
-        if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-          const err = "Échec displayDialogAsync: " + asyncResult.error.message + " (Code: " + asyncResult.error.code + ")";
-          alert(err);
-          if(self.localStorage) localStorage.setItem('addin_error', err);
-        } else {
-          alert("Dialogue ouvert avec succès !");
-        }
-        // Toujours fermer l'événement à la toute fin du callback
-        if(event) event.completed();
+        // Optionnel : Si votre dialog.html envoie un message pour dire "j'ai fini"
+        loginDialog.addEventHandler(Office.EventType.DialogMessageReceived, (arg) => {
+          // Si le dialogue envoie un signal de fermeture volontaire
+          loginDialog.close();
+          event.completed();
+        });
       }
-    );
-  } catch (e) {
-    const catchErr = "Erreur dans le bloc try: " + e.message;
-    alert(catchErr);
-    if(self.localStorage) localStorage.setItem('addin_error', catchErr);
-    if(event) event.completed();
-  }
+    }
+  );
 }
+
+// Associe la fonction JS à l'action déclarée dans le manifest
+Office.actions.associate("actionOpenPlanning", actionOpenPlanning);
