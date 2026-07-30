@@ -24,13 +24,17 @@ function actionOpenPlanning(event) {
         console.error(
           "Impossible d'ouvrir le planning : " + asyncResult.error.message
         );
-      }
+		  // Indispensable : signale à Outlook que l'action est terminée.
+		event.completed();
+      } else {
+		   // Indispensable : signale à Outlook que l'action est terminée.
+		event.completed(); 
+	  }
       // On ne garde pas de référence au dialog : il vit sa vie indépendamment.
     }
   );
 
-  // Indispensable : signale à Outlook que l'action est terminée.
-  event.completed();
+
 }
 
 // Associe la fonction JS à l'action déclarée dans le manifest.json
