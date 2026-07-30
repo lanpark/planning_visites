@@ -1,8 +1,8 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.19/MicrosoftTeams.schema.json",
   "manifestVersion": "1.19",
-  "version": "1.0.7",
-  "id": "c18d7d4f-f69a-4536-bcb7-03e761f3cfcc",
+  "version": "1.0.4",
+  "id": "c18d7d4f-f69a-4536-bcb7-03e761f3cfd5",
   "developer": {
     "name": "Nicolas",
     "websiteUrl": "https://lanpark.github.io/planning_visites/",
@@ -15,7 +15,7 @@
   },
   "description": {
     "short": "Ouvre l'application de planification des visites",
-    "full": "Bouton de lancement rapide vers l'application Power Apps."
+    "full": "Bouton de lancement rapide vers l'application Power Apps de planification et remplissage automatique des visites."
   },
   "icons": {
     "outline": "assets/icon-outline.png",
@@ -47,6 +47,7 @@
           "type": "general",
           "code": {
             "page": "https://lanpark.github.io/planning_visites/commands.html",
+            "script": "https://lanpark.github.io/planning_visites/commands.js"
           },
           "lifetime": "short",
           "actions": [
@@ -62,7 +63,9 @@
         {
           "contexts": [
             "mailRead",
-            "mailCompose"
+            "mailCompose",
+            "meetingDetailsOrganizer",
+            "meetingDetailsAttendee"
           ],
           "tabs": [
             {
@@ -73,7 +76,8 @@
                   "label": "Planning Visites",
                   "icons": [
                     { "size": 16, "url": "https://lanpark.github.io/planning_visites/assets/icon-16.png" },
-                    { "size": 32, "url": "https://lanpark.github.io/planning_visites/assets/icon-32.png" }
+                    { "size": 32, "url": "https://lanpark.github.io/planning_visites/assets/icon-32.png" },
+                    { "size": 80, "url": "https://lanpark.github.io/planning_visites/assets/icon-80.png" }
                   ],
                   "controls": [
                     {
@@ -82,11 +86,12 @@
                       "label": "Planning Visites",
                       "icons": [
                         { "size": 16, "url": "https://lanpark.github.io/planning_visites/assets/icon-16.png" },
-                        { "size": 32, "url": "https://lanpark.github.io/planning_visites/assets/icon-32.png" }
+                        { "size": 32, "url": "https://lanpark.github.io/planning_visites/assets/icon-32.png" },
+                        { "size": 80, "url": "https://lanpark.github.io/planning_visites/assets/icon-80.png" }
                       ],
                       "supertip": {
-                        "title": "Ouvrir le planning",
-                        "description": "Lance l'application de planification."
+                        "title": "Ouvrir le planning des visites",
+                        "description": "Lance l'application de planification et de remplissage automatique des visites."
                       },
                       "actionId": "actionOpenPlanning"
                     }

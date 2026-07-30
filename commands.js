@@ -4,9 +4,10 @@ Office.onReady(() => {
 });
 
 function actionOpenPlanning(event) {
+	
   // Ton URL Power Apps exacte, appelée DIRECTEMENT
   const powerAppsUrl = "https://apps.powerapps.com/play/e/default-1142a072-6d78-4789-a846-e69a5abb61b4/a/415f9d61-b3be-418d-9421-869452d86e9b?tenantId=1142a072-6d78-4789-a846-e69a5abb61b4";
-
+	console.log("Action appelée");
   Office.context.ui.displayDialogAsync(
     powerAppsUrl,
     {
