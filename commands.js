@@ -1,41 +1,43 @@
-Office.onReady(() => {
-  // Rien à initialiser : ce fichier ne contient que l'action du bouton.
-});
+// Fonction globale de secours pour attraper les erreurs de syntaxe ou d'exécution
+self.onerror = function(message, source, lineno, colno, error) {
+    const txt = "Erreur Globale: " + message + " à " + source + ":" + lineno;
+    alert(txt); // Tente d'afficher une boîte système
+    if(self.localStorage) localStorage.setItem('addin_error', txt);
+    return false;
+};
 
-/**
- * Action déclenchée par le bouton "Planning Visites" du ruban.
- * Ouvre une fenêtre de dialogue Office qui navigue DIRECTEMENT vers
- * l'URL de lecture de l'app Power Apps (pas d'iframe, pas d'embedding),
- * ce qui contourne les restrictions d'embedding dans une app native.
- */
 function actionOpenPlanning(event) {
-  const dialogUrl = "https://lanpark.github.io/planning_visites/dialog.html";
-
-  Office.context.ui.displayDialogAsync(
-    dialogUrl,
-    {
-      height: 80,          // % de l'écran
-      width: 60,            // % de l'écran
-      displayInIframe: false, // force une vraie fenêtre, pas un cadre imbriqué
-      promptBeforeOpen: false
-    },
-    (asyncResult) => {
-      if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-        console.error(
-          "Impossible d'ouvrir le planning : " + asyncResult.error.message
-        );
-		  // Indispensable : signale à Outlook que l'action est terminée.
-		event.completed();
-      } else {
-		   // Indispensable : signale à Outlook que l'action est terminée.
-		event.completed(); 
-	  }
-      // On ne garde pas de référence au dialog : il vit sa vie indépendamment.
+  try {
+    // Étape 1 : Vérifier si l'API Office est bien chargée dans ce contexte
+    if (typeof Office === 'undefined') {
+      alert("Erreur : L'objet 'Office' n'est pas défini !");
+      if(event) event.completed();
+      return;
     }
-  );
 
+    var dialogUrl = "https://lanpark.github.io/planning_visites/dialog.html";
 
+    alert("Tentative d'ouverture du dialogue..."); // Pour valider que le clic est bien reçu
+
+    Office.context.ui.displayDialogAsync(
+      dialogUrl,
+      { height: 80, width: 60, displayInIframe: false, promptBeforeOpen: false },
+      function (asyncResult) {
+        if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+          const err = "Échec displayDialogAsync: " + asyncResult.error.message + " (Code: " + asyncResult.error.code + ")";
+          alert(err);
+          if(self.localStorage) localStorage.setItem('addin_error', err);
+        } else {
+          alert("Dialogue ouvert avec succès !");
+        }
+        // Toujours fermer l'événement à la toute fin du callback
+        if(event) event.completed();
+      }
+    );
+  } catch (e) {
+    const catchErr = "Erreur dans le bloc try: " + e.message;
+    alert(catchErr);
+    if(self.localStorage) localStorage.setItem('addin_error', catchErr);
+    if(event) event.completed();
+  }
 }
-
-// Associe la fonction JS à l'action déclarée dans le manifest.json
-Office.actions.associate("actionOpenPlanning", actionOpenPlanning);
