@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.19/MicrosoftTeams.schema.json",
   "manifestVersion": "1.19",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "id": "c18d7d4f-f69a-4536-bcb7-03e761f3cfc5",
   "developer": {
     "name": "Nicolas",
@@ -24,11 +24,14 @@
   "accentColor": "#0F6CBD",
   "validDomains": [
     "apps.powerapps.com",
+    "*.apps.powerapps.com",
     "*.powerapps.com",
     "*.dynamics.com",
     "lanpark.github.io",
-    "login.microsoftonline.com",
-    "login.windows.net"
+    "*.microsoftonline.com",
+    "*.windows.net",
+    "*.msauth.net",
+    "*.msftauth.net"
   ],
   "extensions": [
     {
