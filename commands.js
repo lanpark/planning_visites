@@ -1,3 +1,8 @@
+Office.onReady(() => {
+  // Rien à initialiser : ce fichier ne contient que l'action du bouton.
+});
+
+
 // Fonction globale de secours pour attraper les erreurs de syntaxe ou d'exécution
 self.onerror = function(message, source, lineno, colno, error) {
     const txt = "Erreur Globale: " + message + " à " + source + ":" + lineno;
