@@ -1,61 +1,42 @@
-let isOfficeReady = false;
-
-// Sécurité : On attend que l'API Office soit totalement opérationnelle
-Office.onReady((info) => {
-  if (info.host === Office.HostType.Outlook) {
-    isOfficeReady = true;
-    console.log("Office.js est pleinement initialisé et prêt.");
-  }
+Office.onReady(() => {
+  // Le framework Office de la commande principale est prêt
+  console.log("CommandsRuntime prêt.");
 });
 
-/**
- * Action déclenchée par le bouton du ruban.
- */
 function actionOpenPlanning(event) {
-  console.log("Clic détecté sur le bouton Planning Visites.");
+  // Ton URL Power Apps exacte, appelée DIRECTEMENT
+  const powerAppsUrl = "https://apps.powerapps.com/play/e/default-1142a072-6d78-4789-a846-e69a5abb61b4/a/415f9d61-b3be-418d-9421-869452d86e9b?tenantId=1142a072-6d78-4789-a846-e69a5abb61b4";
 
-  // Si l'API n'est pas encore prête, on attend un court instant avant de retenter
-  if (!isOfficeReady) {
-    console.warn("L'API Office n'est pas encore prête, mise en attente...");
-    setTimeout(() => actionOpenPlanning(event), 500);
-    return;
-  }
-
-  const dialogUrl = "https://lanpark.github.io/planning_visites/dialog.html";
-
-  try {
-    Office.context.ui.displayDialogAsync(
-      dialogUrl,
-      {
-        height: 80,
-        width: 60,
-        displayInIframe: false, // Force l'ouverture d'une vraie popup séparée
-        promptBeforeOpen: false
-      },
-      (asyncResult) => {
-        if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-          console.error("Échec displayDialogAsync : " + asyncResult.error.message);
-          event.completed();
-        } else {
-          console.log("Demande d'ouverture de la popup envoyée avec succès.");
-          
-          const loginDialog = asyncResult.value;
-          
-          // On écoute la fermeture manuelle par l'utilisateur (croix X)
-          loginDialog.addEventHandler(Office.EventType.DialogEventReceived, (arg) => {
-            if (arg.error === 12006) {
-              console.log("L'utilisateur a fermé la boîte de dialogue.");
-              event.completed();
-            }
-          });
-        }
+  Office.context.ui.displayDialogAsync(
+    powerAppsUrl,
+    {
+      height: 85,             // Prend une bonne partie de l'écran
+      width: 65,
+      displayInIframe: false, // OBLIGATOIRE : ouvre une vraie fenêtre pop-up, pas d'iframe
+      promptBeforeOpen: false
+    },
+    (asyncResult) => {
+      if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+        console.error("Échec de l'ouverture du dialogue : " + asyncResult.error.message);
+        // Libère le bouton Outlook si ça échoue au lancement
+        event.completed();
+        return;
       }
-    );
-  } catch (err) {
-    console.error("Erreur fatale lors de l'appel au dialogue : ", err);
-    event.completed();
-  }
+
+      // L'ouverture a réussi, on récupère le contrôle de la fenêtre de dialogue
+      const dialog = asyncResult.value;
+
+      // On écoute l'événement de fermeture pour savoir quand l'utilisateur a fini
+      dialog.addEventHandler(Office.EventType.DialogEventReceived, (args) => {
+        if (args.error === 12006) { // 12006 = L'utilisateur a cliqué sur la croix (X)
+          console.log("Fenêtre Power Apps fermée par l'utilisateur.");
+          // C'est seulement à ce moment précis qu'on dit à Outlook que l'action est terminée !
+          event.completed();
+        }
+      });
+    }
+  );
 }
 
-// Enregistrement de l'action
+// Liaison de la fonction au manifeste
 Office.actions.associate("actionOpenPlanning", actionOpenPlanning);
