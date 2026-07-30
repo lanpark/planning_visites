@@ -1,0 +1,99 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.19/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.19",
+  "version": "1.0.0",
+  "id": "c18d7d4f-f69a-4536-bcb7-03e761f3cfc5",
+  "developer": {
+    "name": "Nicolas",
+    "websiteUrl": "https://lanpark.github.io/planning_visites/",
+    "privacyUrl": "https://lanpark.github.io/planning_visites/",
+    "termsOfUseUrl": "https://lanpark.github.io/planning_visites/"
+  },
+  "name": {
+    "short": "Planning Visites",
+    "full": "Planning des visites - Ouvrir l'application"
+  },
+  "description": {
+    "short": "Ouvre l'application de planification des visites",
+    "full": "Bouton de lancement rapide vers l'application Power Apps de planification et remplissage automatique des visites."
+  },
+  "icons": {
+    "outline": "assets/icon-outline.png",
+    "color": "assets/icon-color.png"
+  },
+  "accentColor": "#0F6CBD",
+  "validDomains": [
+    "apps.powerapps.com",
+    "*.dynamics.com",
+    "lanpark.github.io"
+  ],
+  "extensions": [
+    {
+      "requirements": {
+        "scopes": ["mail"]
+      },
+      "runtimes": [
+        {
+          "id": "commandsRuntime",
+          "type": "general",
+          "code": {
+            "page": "https://lanpark.github.io/planning_visites/commands.html",
+            "script": "https://lanpark.github.io/planning_visites/commands.js"
+          },
+          "lifetime": "short",
+          "actions": [
+            {
+              "id": "actionOpenPlanning",
+              "type": "executeFunction",
+              "displayName": "Ouvrir Planning Visites"
+            }
+          ]
+        }
+      ],
+      "ribbons": [
+        {
+          "contexts": [
+            "mailRead",
+            "mailCompose",
+            "meetingDetailsOrganizer",
+            "meetingDetailsAttendee",
+            "default"
+          ],
+          "tabs": [
+            {
+              "builtInTabId": "TabDefault",
+              "groups": [
+                {
+                  "id": "planningGroup",
+                  "label": "Planning Visites",
+                  "icons": [
+                    { "size": 16, "url": "https://lanpark.github.io/planning_visites/assets/icon-16.png" },
+                    { "size": 32, "url": "https://lanpark.github.io/planning_visites/assets/icon-32.png" },
+                    { "size": 80, "url": "https://lanpark.github.io/planning_visites/assets/icon-80.png" }
+                  ],
+                  "controls": [
+                    {
+                      "id": "btnOpenPlanning",
+                      "type": "button",
+                      "label": "Planning Visites",
+                      "icons": [
+                        { "size": 16, "url": "https://lanpark.github.io/planning_visites/assets/icon-16.png" },
+                        { "size": 32, "url": "https://lanpark.github.io/planning_visites/assets/icon-32.png" },
+                        { "size": 80, "url": "https://lanpark.github.io/planning_visites/assets/icon-80.png" }
+                      ],
+                      "supertip": {
+                        "title": "Ouvrir le planning des visites",
+                        "description": "Lance l'application de planification et de remplissage automatique des visites."
+                      },
+                      "actionId": "actionOpenPlanning"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
