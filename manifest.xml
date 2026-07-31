@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xsi:type="MailApp">
+  <Id>c18d7d4f-f69a-4536-bcb7-03e767f3cfc5</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Nicolas</ProviderName>
+  <DefaultLocale>fr-FR</DefaultLocale>
+  <DisplayName DefaultValue="Planning Visites"/>
+  <Description DefaultValue="Ouvre l'application Power Apps de planning des visites."/>
+  <IconUrl DefaultValue="https://lanpark.github.io/planning_visites/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://lanpark.github.io/planning_visites/assets/icon-80.png"/>
+  <SupportUrl DefaultValue="https://lanpark.github.io/planning_visites/"/>
+  <AppDomains>
+    <AppDomain>lanpark.github.io</AppDomain>
+    <AppDomain>apps.powerapps.com</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+  <Requirements>
+    <bt:Sets>
+      <bt:Set Name="Mailbox" MinVersion="1.8"/>
+    </bt:Sets>
+  </Requirements>
+  <Permissions>ReadWriteMailbox</Permissions>
+  <VersionOverrides Version="1.1" xsi:type="VersionOverridesV1_1">
+    <Requirements>
+      <bt:Sets>
+        <bt:Set Name="Mailbox" MinVersion="1.8"/>
+      </bt:Sets>
+    </Requirements>
+    <Hosts>
+      <Host Name="Mailbox">
+        <DesktopFormFactor>
+          <FunctionFile resid="functionFile"/>
+          <ExtensionPoint xsi:type="MessageReadCommandSurface">
+            <OfficeTab id="TabDefault">
+              <Group id="msgReadGroup" label="Planning Visites">
+                <Control xsi:type="Button" id="btnOpenPlanningRead">
+                  <Label resid="buttonLabel"/>
+                  <Supertip>
+                    <Title resid="buttonTitle"/>
+                    <Description resid="buttonDescription"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="icon16"/>
+                    <bt:Image size="32" resid="icon32"/>
+                    <bt:Image size="80" resid="icon80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <SourceLocation resid="taskpaneUrl"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+          <ExtensionPoint xsi:type="MessageComposeCommandSurface">
+            <OfficeTab id="TabDefault">
+              <Group id="msgComposeGroup" label="Planning Visites">
+                <Control xsi:type="Button" id="btnOpenPlanningCompose">
+                  <Label resid="buttonLabel"/>
+                  <Supertip>
+                    <Title resid="buttonTitle"/>
+                    <Description resid="buttonDescription"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="icon16"/>
+                    <bt:Image size="32" resid="icon32"/>
+                    <bt:Image size="80" resid="icon80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <SourceLocation resid="taskpaneUrl"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="icon16" DefaultValue="https://lanpark.github.io/planning_visites/assets/icon-16.png"/>
+        <bt:Image id="icon32" DefaultValue="https://lanpark.github.io/planning_visites/assets/icon-32.png"/>
+        <bt:Image id="icon80" DefaultValue="https://lanpark.github.io/planning_visites/assets/icon-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="functionFile" DefaultValue="https://lanpark.github.io/planning_visites/commands.html"/>
+        <bt:Url id="taskpaneUrl" DefaultValue="https://lanpark.github.io/planning_visites/taskpane.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="buttonLabel" DefaultValue="Planning Visites"/>
+        <bt:String id="buttonTitle" DefaultValue="Ouvrir Planning Visites"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="buttonDescription" DefaultValue="Lance l'application Power Apps de planification des visites."/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>
