@@ -1,8 +1,8 @@
 {
     "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.19/MicrosoftTeams.schema.json",
     "manifestVersion": "1.19",
-    "version": "1.0.2",
-    "id": "c18d7d4f-f69a-4536-bcb7-03e761f3cfc5",
+    "version": "1.0.0",
+    "id": "c18d7d4f-f69a-4536-bcb7-03e761f9cfc5",
     "developer": {
         "name": "Nicolas",
         "websiteUrl": "https://lanpark.github.io/planning_visites/",
