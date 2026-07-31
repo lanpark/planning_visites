@@ -1,6 +1,7 @@
 Office.onReady(() => {
   // Le framework Office de la commande principale est prêt
   console.log("CommandsRuntime prêt.");
+  Office.actions.associate("actionOpenPlanning", actionOpenPlanning);
 });
 
 function actionOpenPlanning(event) {
@@ -28,6 +29,3 @@ function actionOpenPlanning(event) {
     }
   );
 }
-
-// Liaison de la fonction au manifeste
-Office.actions.associate("actionOpenPlanning", actionOpenPlanning);
